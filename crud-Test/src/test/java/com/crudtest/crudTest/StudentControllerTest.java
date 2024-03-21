@@ -3,8 +3,7 @@ import com.crudtest.crudTest.controllers.StudentController;
 import com.crudtest.crudTest.entities.Student;
 import com.crudtest.crudTest.services.StudentService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,6 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class StudentControllerTest {
     @Autowired
     private StudentController studentController;
@@ -40,6 +40,7 @@ public class StudentControllerTest {
     }
 
     @Test
+    @Order(1)
     void createStudent() throws Exception {
         Student student = new Student();
         student.setId(1L);
@@ -57,6 +58,7 @@ public class StudentControllerTest {
     }
 
     @Test
+    @Order(4)
     void getAllStudents() throws Exception {
         createStudent();
         MvcResult result = this.mockMvc.perform(get("/v1/getall"))
@@ -69,6 +71,7 @@ public class StudentControllerTest {
     }
 
     @Test
+    @Order(3)
     void getStudent() throws Exception {
         Long studentId = 1L;
         createStudent();
@@ -80,6 +83,7 @@ public class StudentControllerTest {
     }
 
     @Test
+    @Order(2)
     void updateStudentById() throws Exception {
         Long studentId = 1L;
         createStudent();
@@ -93,6 +97,7 @@ public class StudentControllerTest {
     }
 
     @Test
+    @Order(6)
     void deleteStudente() throws Exception {
         Long studentId = 1L;
         createStudent();
@@ -105,6 +110,7 @@ public class StudentControllerTest {
     }
 
     @Test
+    @Order(5)
     void studentActivation() throws Exception {
         Long id = 1L;
         createStudent();
