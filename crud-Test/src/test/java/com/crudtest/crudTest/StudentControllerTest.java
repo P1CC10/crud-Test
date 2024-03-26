@@ -58,9 +58,22 @@ public class StudentControllerTest {
     }
 
     @Test
+    @Order(2)
+    void updateStudentById() throws Exception {
+        Long studentId = 1L;
+        Student updatedStudent = new Student(studentId, "Updated", "Name", true);
+        String studentJSON = objectMapper.writeValueAsString(updatedStudent);
+        MvcResult result = this.mockMvc.perform(MockMvcRequestBuilders.put("/v1/putstudent/{id}", studentId)
+                        .contentType(MediaType.APPLICATION_JSON).content(studentJSON))
+                .andDo(print()).andExpect(status().isOk()).andReturn();
+        String content = result.getResponse().getContentAsString();
+        Assertions.assertNotNull(content);
+    }
+
+    @Test
     @Order(4)
     void getAllStudents() throws Exception {
-        createStudent();
+
         MvcResult result = this.mockMvc.perform(get("/v1/getall"))
                 .andDo(print()).andReturn();
 
@@ -74,7 +87,7 @@ public class StudentControllerTest {
     @Order(3)
     void getStudent() throws Exception {
         Long studentId = 1L;
-        createStudent();
+
 
         MvcResult resultActions = mockMvc.perform(MockMvcRequestBuilders.get("/v1/getsingle/{id}", studentId))
                 .andExpect(status().isOk())
@@ -82,25 +95,13 @@ public class StudentControllerTest {
 
     }
 
-    @Test
-    @Order(2)
-    void updateStudentById() throws Exception {
-        Long studentId = 1L;
-        createStudent();
-        Student updatedStudent = new Student(studentId, "Updated", "Name", false);
-        String studentJSON = objectMapper.writeValueAsString(updatedStudent);
-        MvcResult result = this.mockMvc.perform(MockMvcRequestBuilders.put("/v1/putstudent/{id}", studentId)
-                        .contentType(MediaType.APPLICATION_JSON).content(studentJSON))
-                .andDo(print()).andExpect(status().isOk()).andReturn();
-        String content = result.getResponse().getContentAsString();
-        Assertions.assertNotNull(content);
-    }
+
 
     @Test
     @Order(6)
     void deleteStudente() throws Exception {
         Long studentId = 1L;
-        createStudent();
+
 
         MvcResult result = mockMvc.perform(delete("/v1/deletesingle/{id}",studentId)
                         .contentType(MediaType.APPLICATION_JSON))
@@ -113,8 +114,8 @@ public class StudentControllerTest {
     @Order(5)
     void studentActivation() throws Exception {
         Long id = 1L;
-        createStudent();
-        boolean isWorking = false;
+
+        boolean isWorking = true;
 
         mockMvc.perform(MockMvcRequestBuilders.patch("/v1/active/{id}",id)
                         .param("isWorking", String.valueOf(isWorking)))
